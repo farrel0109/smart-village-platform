@@ -1,157 +1,210 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// Controllers
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\UserDashboardController;
+
+// Admin Controllers
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VillageController;
 use App\Http\Controllers\Admin\LetterController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\FamilyController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\LetterTemplateController;
+use App\Http\Controllers\Admin\ImportController;
+use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\BackupController;
+
+// User Controllers
 use App\Http\Controllers\User\LetterRequestController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
 */
 
-// ==============================
-// PUBLIC ROUTES (Landing Page)
-// ==============================
+// ============================================================================
+// PUBLIC ROUTES
+// ============================================================================
+
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
-// ==============================
-// GUEST ROUTES (Auth)
-// ==============================
+// ============================================================================
+// GUEST ROUTES (Authentication)
+// ============================================================================
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
-    
-    // Rate limited auth routes
+    Route::get('/register', [AuthController::class, 'registerView'])->name('register');
+
+    // Rate limited actions
     Route::middleware('throttle:5,1')->group(function () {
         Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
     });
-
-    Route::get('/register', [AuthController::class, 'registerView'])->name('register');
 });
 
-// ==============================
-// AUTHENTICATED ROUTES
-// ==============================
+// ============================================================================
+// AUTHENTICATED ROUTES (Common)
+// ============================================================================
+
 Route::middleware('auth')->group(function () {
+    // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-    // Profile management
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.update-password');
+
+    // Profile Management
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::put('/', [ProfileController::class, 'update'])->name('update');
+        Route::put('/password', [ProfileController::class, 'updatePassword'])->name('update-password');
+    });
 
     // Notifications
-    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
-    Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
+        Route::get('/{notification}/read', [NotificationController::class, 'markAsRead'])->name('mark-read');
+    });
 
-    // Two-Factor Authentication
-    Route::get('/two-factor', [App\Http\Controllers\TwoFactorController::class, 'index'])->name('two-factor.index');
-    Route::post('/two-factor/enable', [App\Http\Controllers\TwoFactorController::class, 'enable'])->name('two-factor.enable');
-    Route::delete('/two-factor/disable', [App\Http\Controllers\TwoFactorController::class, 'disable'])->name('two-factor.disable');
-
-    // User Dashboard (for regular users)
-    Route::get('/dashboard', [App\Http\Controllers\UserDashboardController::class, 'index'])->name('user.dashboard');
-    Route::get('/my-letters', [App\Http\Controllers\UserDashboardController::class, 'letters'])->name('user.letters');
-    Route::get('/announcements', [App\Http\Controllers\UserDashboardController::class, 'announcements'])->name('user.announcements');
-    Route::get('/announcements/{announcement}', [App\Http\Controllers\UserDashboardController::class, 'showAnnouncement'])->name('user.announcements.show');
+    // Two-Factor Authentication Settings
+    Route::prefix('two-factor')->name('two-factor.')->group(function () {
+        Route::get('/', [TwoFactorController::class, 'index'])->name('index');
+        Route::post('/enable', [TwoFactorController::class, 'enable'])->name('enable');
+        Route::delete('/disable', [TwoFactorController::class, 'disable'])->name('disable');
+    });
 });
 
-// 2FA Verification (for login)
-Route::get('/two-factor/verify', [App\Http\Controllers\TwoFactorController::class, 'showVerify'])->name('two-factor.verify');
-Route::post('/two-factor/verify', [App\Http\Controllers\TwoFactorController::class, 'verify'])->name('two-factor.verify.post');
+// ============================================================================
+// 2FA VERIFICATION
+// ============================================================================
 
-// ==============================
-// ADMIN PANEL (superadmin & admin)
-// ==============================
-Route::middleware(['auth', 'role:superadmin,admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['web'])->group(function () {
+    Route::get('/two-factor/verify', [TwoFactorController::class, 'showVerify'])->name('two-factor.verify');
+    Route::post('/two-factor/verify', [TwoFactorController::class, 'verify'])->name('two-factor.verify.post');
+});
+
+// ============================================================================
+// USER PANEL (Role: User)
+// ============================================================================
+
+Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
-    // Resident management
-    Route::resource('residents', ResidentController::class)->except(['show']);
-    
-    // User management (approve/reject)
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::patch('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
-    Route::patch('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    
-    // Letter requests management
-    Route::get('/letters', [LetterController::class, 'index'])->name('letters.index');
-    Route::get('/letters/{letter}', [LetterController::class, 'show'])->name('letters.show');
-    Route::patch('/letters/{letter}/process', [LetterController::class, 'process'])->name('letters.process');
-    Route::patch('/letters/{letter}/complete', [LetterController::class, 'complete'])->name('letters.complete');
-    Route::patch('/letters/{letter}/reject', [LetterController::class, 'reject'])->name('letters.reject');
-    Route::get('/letters/{letter}/download', [LetterController::class, 'download'])->name('letters.download');
-    
-    // Activity logs
-    Route::get('/activity-logs', [App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
-    
-    // Family management
-    Route::resource('families', App\Http\Controllers\Admin\FamilyController::class);
-    Route::post('/families/{family}/add-member', [App\Http\Controllers\Admin\FamilyController::class, 'addMember'])->name('families.add-member');
-    Route::delete('/families/{family}/members/{resident}', [App\Http\Controllers\Admin\FamilyController::class, 'removeMember'])->name('families.remove-member');
-    
-    // Settings
-    Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
-    Route::put('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
-    Route::delete('/settings/logo', [App\Http\Controllers\Admin\SettingsController::class, 'removeLogo'])->name('settings.remove-logo');
-    
-    // Reports
-    Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/export-residents', [App\Http\Controllers\Admin\ReportController::class, 'exportResidents'])->name('reports.export-residents');
-    Route::get('/reports/export-families', [App\Http\Controllers\Admin\ReportController::class, 'exportFamilies'])->name('reports.export-families');
-    Route::get('/reports/export-letters', [App\Http\Controllers\Admin\ReportController::class, 'exportLetters'])->name('reports.export-letters');
-    
-    // Letter Templates
-    Route::resource('letter-templates', App\Http\Controllers\Admin\LetterTemplateController::class)->except(['show']);
-    Route::get('/letter-templates/{letterTemplate}/preview', [App\Http\Controllers\Admin\LetterTemplateController::class, 'preview'])->name('letter-templates.preview');
-    
-    // Import
-    Route::get('/import', [App\Http\Controllers\Admin\ImportController::class, 'index'])->name('import.index');
-    Route::get('/import/template/{type}', [App\Http\Controllers\Admin\ImportController::class, 'downloadTemplate'])->name('import.template');
-    Route::post('/import/preview', [App\Http\Controllers\Admin\ImportController::class, 'preview'])->name('import.preview');
-    Route::post('/import/process', [App\Http\Controllers\Admin\ImportController::class, 'process'])->name('import.process');
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
     
     // Announcements
-    Route::resource('announcements', App\Http\Controllers\Admin\AnnouncementController::class);
-    Route::patch('/announcements/{announcement}/toggle', [App\Http\Controllers\Admin\AnnouncementController::class, 'togglePublish'])->name('announcements.toggle');
-    
-    // Backup
-    Route::get('/backup', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backup.index');
-    Route::post('/backup', [App\Http\Controllers\Admin\BackupController::class, 'create'])->name('backup.create');
-    Route::get('/backup/{filename}/download', [App\Http\Controllers\Admin\BackupController::class, 'download'])->name('backup.download');
-    Route::delete('/backup/{filename}', [App\Http\Controllers\Admin\BackupController::class, 'destroy'])->name('backup.destroy');
+    Route::get('/announcements', [UserDashboardController::class, 'announcements'])->name('announcements.index');
+    Route::get('/announcements/{announcement}', [UserDashboardController::class, 'showAnnouncement'])->name('announcements.show');
+
+    // Letter Requests (using LetterRequestController)
+    Route::prefix('letters')->name('letters.')->group(function () {
+        Route::get('/', [LetterRequestController::class, 'index'])->name('index');
+        Route::get('/create', [LetterRequestController::class, 'create'])->name('create');
+        Route::post('/', [LetterRequestController::class, 'store'])->name('store');
+        Route::get('/{letter}', [LetterRequestController::class, 'show'])->name('show');
+    });
 });
 
-// ==============================
-// SUPERADMIN ONLY
-// ==============================
+// ============================================================================
+// ADMIN PANEL (Role: Superadmin & Admin)
+// ============================================================================
+
+Route::middleware(['auth', 'role:superadmin,admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Core Data Management
+    Route::resource('residents', ResidentController::class)->except(['show']);
+    Route::resource('families', FamilyController::class);
+    
+    // Family Members
+    Route::post('/families/{family}/add-member', [FamilyController::class, 'addMember'])->name('families.add-member');
+    Route::delete('/families/{family}/members/{resident}', [FamilyController::class, 'removeMember'])->name('families.remove-member');
+
+    // User Management
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::patch('/{user}/approve', [UserController::class, 'approve'])->name('approve');
+        Route::patch('/{user}/reject', [UserController::class, 'reject'])->name('reject');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+    });
+
+    // Letter Management
+    Route::prefix('letters')->name('letters.')->group(function () {
+        Route::get('/', [LetterController::class, 'index'])->name('index');
+        Route::get('/{letter}', [LetterController::class, 'show'])->name('show');
+        Route::get('/{letter}/download', [LetterController::class, 'download'])->name('download');
+        
+        // Actions
+        Route::patch('/{letter}/process', [LetterController::class, 'process'])->name('process');
+        Route::patch('/{letter}/complete', [LetterController::class, 'complete'])->name('complete');
+        Route::patch('/{letter}/reject', [LetterController::class, 'reject'])->name('reject');
+    });
+
+    // Letter Templates
+    Route::resource('letter-templates', LetterTemplateController::class)->except(['show']);
+    Route::get('/letter-templates/{letterTemplate}/preview', [LetterTemplateController::class, 'preview'])->name('letter-templates.preview');
+
+    // Announcements
+    Route::resource('announcements', AnnouncementController::class);
+    Route::patch('/announcements/{announcement}/toggle', [AnnouncementController::class, 'togglePublish'])->name('announcements.toggle');
+
+    // Reports & Exports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/export-residents', [ReportController::class, 'exportResidents'])->name('export-residents');
+        Route::get('/export-families', [ReportController::class, 'exportFamilies'])->name('export-families');
+        Route::get('/export-letters', [ReportController::class, 'exportLetters'])->name('export-letters');
+    });
+
+    // System Tools
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+    
+    // Import Data
+    Route::prefix('import')->name('import.')->group(function () {
+        Route::get('/', [ImportController::class, 'index'])->name('index');
+        Route::get('/template/{type}', [ImportController::class, 'downloadTemplate'])->name('template');
+        Route::post('/preview', [ImportController::class, 'preview'])->name('preview');
+        Route::post('/process', [ImportController::class, 'process'])->name('process');
+    });
+
+    // Backup System
+    Route::prefix('backup')->name('backup.')->group(function () {
+        Route::get('/', [BackupController::class, 'index'])->name('index');
+        Route::post('/', [BackupController::class, 'create'])->name('create');
+        Route::get('/{filename}/download', [BackupController::class, 'download'])->name('download');
+        Route::delete('/{filename}', [BackupController::class, 'destroy'])->name('destroy');
+    });
+
+    // Settings
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('index');
+        Route::put('/', [SettingsController::class, 'update'])->name('update');
+        Route::delete('/logo', [SettingsController::class, 'removeLogo'])->name('remove-logo');
+    });
+});
+
+// ============================================================================
+// SUPERADMIN ONLY ROUTES
+// ============================================================================
+
 Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->name('admin.')->group(function () {
-    // Village management
     Route::resource('villages', VillageController::class)->except(['show']);
-});
-
-// ==============================
-// USER PANEL
-// ==============================
-Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('pages.user.dashboard');
-    })->name('dashboard');
-    
-    // Letter requests
-    Route::get('/letters', [LetterRequestController::class, 'index'])->name('letters.index');
-    Route::get('/letters/create', [LetterRequestController::class, 'create'])->name('letters.create');
-    Route::post('/letters', [LetterRequestController::class, 'store'])->name('letters.store');
-    Route::get('/letters/{letter}', [LetterRequestController::class, 'show'])->name('letters.show');
 });

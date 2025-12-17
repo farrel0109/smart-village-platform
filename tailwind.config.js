@@ -13,6 +13,27 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
+                display: ['Public Sans', 'Noto Sans', 'sans-serif'],
+            },
+            colors: {
+                "primary": "#2E7D32", // Hijau dedaunan (Leaf Green)
+                "primary-hover": "#1B5E20",
+                "sky-blue": "#0288D1", // Biru langit
+                "earth": "#795548", // Cokelat tanah
+                "dark-grey": "#263238", // Abu-abu gelap (Futuristic)
+                "background-light": "#FAFAFA",
+                "background-dark": "#121212",
+                "surface-dark": "#1E1E1E",
+                "border-light": "#E0E0E0",
+                "border-dark": "#333333",
+                "text-secondary": "#616161",
+                "text-secondary-dark": "#BDBDBD"
+            },
+            borderRadius: {
+                "DEFAULT": "0.375rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
             },
         },
     },

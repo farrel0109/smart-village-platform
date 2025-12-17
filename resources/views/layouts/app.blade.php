@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" :class="{ 'dark': darkMode }">
+<html lang="id" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true', sidebarOpen: false }" :class="{ 'dark': darkMode }">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,15 +14,15 @@
     <!-- Google Fonts - Async Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
-
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     @stack('styles')
 </head>
-<body class="font-sans" :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'">
+<body class="font-display antialiased" :class="darkMode ? 'bg-background-dark text-white' : 'bg-background-light text-dark-grey'">
 
 <!-- Main Layout Container -->
 <div class="flex min-h-screen">
@@ -35,7 +35,7 @@
         @include('layouts.navbar')
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <main class="flex-1 overflow-y-auto p-6 bg-background-light dark:bg-background-dark">
             <div class="max-w-7xl mx-auto">
                 <!-- Success Message with auto-dismiss -->
                 @if(session('success'))

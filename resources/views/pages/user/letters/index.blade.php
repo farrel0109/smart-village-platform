@@ -3,72 +3,80 @@
 @section('title', 'Pengajuan Surat')
 
 @section('content')
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Pengajuan Surat</h1>
-            <p class="text-gray-600">Riwayat pengajuan surat anda</p>
+    <div class="mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-3xl font-black text-dark-grey">Pengajuan Surat</h1>
+                <p class="mt-1 text-text-secondary font-medium">Riwayat pengajuan surat Anda</p>
+            </div>
+            <a href="{{ route('user.letters.create') }}"
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors shadow-sm font-bold mt-4 sm:mt-0">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Ajukan Surat Baru
+            </a>
         </div>
-        <a href="{{ route('user.letters.create') }}"
-           class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm mt-4 sm:mt-0">
-            <i class="fas fa-plus mr-2"></i>
-            Ajukan Surat Baru
-        </a>
     </div>
 
     <!-- Requests List -->
     <div class="space-y-4">
         @forelse($requests as $request)
-            <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+            <a href="{{ route('user.letters.show', $request) }}" class="block bg-white rounded-xl shadow-sm border border-border-light p-6 hover:shadow-md hover:border-primary/30 transition-all group">
                 <div class="flex items-start justify-between">
                     <div class="flex-1">
-                        <div class="flex items-center space-x-3 mb-2">
-                            <span class="text-sm font-medium text-indigo-600">{{ $request->request_number }}</span>
-                            <span class="px-2 py-1 text-xs rounded-full bg-{{ $request->status_color }}-100 text-{{ $request->status_color }}-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-sm font-bold text-primary">{{ $request->request_number }}</span>
+                            <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide rounded-full
+                                @if($request->status === 'pending') bg-yellow-100 text-yellow-800
+                                @elseif($request->status === 'processing') bg-sky-blue/10 text-sky-blue
+                                @elseif($request->status === 'completed') bg-primary/10 text-primary
+                                @else bg-red-100 text-red-800
+                                @endif">
                                 {{ $request->status_label }}
                             </span>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ $request->letterType->name }}</h3>
-                        <p class="text-sm text-gray-600 mb-2">{{ Str::limit($request->purpose, 100) }}</p>
-                        <p class="text-xs text-gray-400">
-                            <i class="fas fa-calendar mr-1"></i>
+                        <h3 class="text-lg font-bold text-dark-grey mb-1 group-hover:text-primary transition-colors">{{ $request->letterType->name }}</h3>
+                        <p class="text-sm text-text-secondary mb-2">{{ Str::limit($request->purpose, 100) }}</p>
+                        <p class="text-xs text-gray-400 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">calendar_today</span>
                             Diajukan {{ $request->created_at->diffForHumans() }}
                         </p>
                     </div>
                     <div class="ml-4">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center">
-                            <i class="fas fa-file-alt text-indigo-600 text-xl"></i>
+                        <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                            <span class="material-symbols-outlined">description</span>
                         </div>
                     </div>
                 </div>
 
                 @if($request->status === 'rejected' && $request->rejection_reason)
-                    <div class="mt-4 p-3 bg-red-50 rounded-lg">
-                        <p class="text-sm text-red-800">
-                            <i class="fas fa-info-circle mr-1"></i>
-                            <strong>Alasan penolakan:</strong> {{ $request->rejection_reason }}
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg border border-red-100">
+                        <p class="text-sm text-red-800 flex items-start gap-2">
+                            <span class="material-symbols-outlined text-[18px] mt-0.5">info</span>
+                            <span><strong>Alasan penolakan:</strong> {{ $request->rejection_reason }}</span>
                         </p>
                     </div>
                 @endif
 
                 @if($request->status === 'completed')
-                    <div class="mt-4 p-3 bg-green-50 rounded-lg">
-                        <p class="text-sm text-green-800">
-                            <i class="fas fa-check-circle mr-1"></i>
-                            Surat anda sudah selesai. Silakan ambil di kantor desa.
+                    <div class="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                        <p class="text-sm text-primary flex items-start gap-2">
+                            <span class="material-symbols-outlined text-[18px] mt-0.5">check_circle</span>
+                            <span>Surat Anda sudah selesai. Silakan ambil di kantor desa.</span>
                         </p>
                     </div>
                 @endif
-            </div>
+            </a>
         @empty
-            <div class="bg-white rounded-xl shadow-sm p-12 text-center">
-                <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-file-alt text-gray-400 text-2xl"></i>
+            <div class="bg-white rounded-xl shadow-sm border border-border-light p-12 text-center">
+                <div class="size-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-3xl text-gray-400">description</span>
                 </div>
-                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum ada pengajuan</h3>
-                <p class="text-gray-500 mb-4">Anda belum pernah mengajukan surat.</p>
+                <h3 class="text-lg font-bold text-dark-grey mb-1">Belum ada pengajuan</h3>
+                <p class="text-text-secondary mb-4">Anda belum pernah mengajukan surat.</p>
                 <a href="{{ route('user.letters.create') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                    <i class="fas fa-plus mr-2"></i> Ajukan Surat
+                   class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-hover font-bold">
+                    <span class="material-symbols-outlined text-[20px]">add</span>
+                    Ajukan Surat
                 </a>
             </div>
         @endforelse

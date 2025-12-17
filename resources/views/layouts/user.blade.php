@@ -11,35 +11,38 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     @stack('styles')
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-background-light font-display text-dark-grey">
 
 <!-- Navbar -->
-<nav class="bg-white shadow-sm fixed w-full z-50">
+<nav class="bg-white shadow-sm fixed w-full z-50 border-b border-border-light">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <a href="{{ route('user.dashboard') }}" class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                        <i class="fas fa-home text-white text-sm"></i>
+                    <div class="size-8 text-primary">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+                        </svg>
                     </div>
-                    <span class="text-lg font-bold text-gray-900">Desa<span class="text-indigo-600">Pintar</span></span>
+                    <span class="text-lg font-bold text-dark-grey">Desa<span class="text-primary">Pintar</span></span>
                 </a>
             </div>
 
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center space-x-6">
                 <a href="{{ route('user.dashboard') }}" 
-                   class="text-sm font-medium {{ request()->routeIs('user.dashboard') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }} transition-colors">
-                    <i class="fas fa-home mr-1"></i> Dashboard
+                   class="text-sm font-bold {{ request()->routeIs('user.dashboard') ? 'text-primary' : 'text-text-secondary hover:text-primary' }} transition-colors">
+                    <span class="material-symbols-outlined text-[20px] align-bottom mr-1">dashboard</span> Dashboard
                 </a>
                 <a href="{{ route('user.letters.index') }}" 
-                   class="text-sm font-medium {{ request()->routeIs('user.letters.*') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }} transition-colors">
-                    <i class="fas fa-file-alt mr-1"></i> Pengajuan Surat
+                   class="text-sm font-bold {{ request()->routeIs('user.letters.*') ? 'text-primary' : 'text-text-secondary hover:text-primary' }} transition-colors">
+                    <span class="material-symbols-outlined text-[20px] align-bottom mr-1">description</span> Pengajuan Surat
                 </a>
             </div>
 

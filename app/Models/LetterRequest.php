@@ -9,11 +9,15 @@ class LetterRequest extends Model
 {
     protected $fillable = [
         'request_number',
+        'letter_number',      // Official number: 015/470/DS-SJM/XII/2025
         'user_id',
         'village_id',
         'letter_type_id',
         'purpose',
         'notes',
+        'dynamic_data',       // JSON for flexible form data
+        'attachments',        // JSON for RT/RW attachments
+        'signed_by',          // head or secretary
         'status',
         'rejection_reason',
         'document_path',
@@ -23,6 +27,8 @@ class LetterRequest extends Model
 
     protected $casts = [
         'processed_at' => 'datetime',
+        'dynamic_data' => 'array',
+        'attachments' => 'array',
     ];
 
     /**

@@ -66,6 +66,10 @@
                             <p class="mt-1 text-gray-800 font-mono">{{ $letter->request_number }}</p>
                         </div>
                         <div>
+                            <label class="text-sm font-medium text-gray-500">Nomor Surat (Resmi)</label>
+                            <p class="mt-1 text-gray-800 font-mono">{{ $letter->letter_number ?? '-' }}</p>
+                        </div>
+                        <div>
                             <label class="text-sm font-medium text-gray-500">Jenis Surat</label>
                             <p class="mt-1 text-gray-800">{{ $letter->letterType->name ?? '-' }}</p>
                         </div>
@@ -77,12 +81,63 @@
                             <label class="text-sm font-medium text-gray-500">Desa</label>
                             <p class="mt-1 text-gray-800">{{ $letter->village->name ?? '-' }}</p>
                         </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Penandatangan</label>
+                            <p class="mt-1 text-gray-800">
+                                {{ $letter->signed_by === 'secretary' ? 'Sekretaris Desa' : 'Kepala Desa' }}
+                            </p>
+                        </div>
                     </div>
 
                     @if($letter->purpose)
                     <div>
                         <label class="text-sm font-medium text-gray-500">Keperluan</label>
                         <p class="mt-1 text-gray-800">{{ $letter->purpose }}</p>
+                    </div>
+                    @endif
+
+                    <!-- Dynamic Data -->
+                    @if($letter->dynamic_data)
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-900 mb-3">Data Tambahan</h3>
+                        <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                            @foreach($letter->dynamic_data as $key => $value)
+                                @if(!is_array($value))
+                                <div>
+                                    <dt class="text-xs font-medium text-gray-500 uppercase">{{ str_replace('_', ' ', $key) }}</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $value }}</dd>
+                                </div>
+                                @endif
+                            @endforeach
+                        </dl>
+                    </div>
+                    @endif
+
+                    <!-- Attachments -->
+                    @if($letter->attachments)
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-gray-900 mb-3">Lampiran Dokumen</h3>
+                        <ul class="space-y-2">
+                            @foreach($letter->attachments as $key => $path)
+                                @if(is_string($path))
+                                <li>
+                                    <a href="{{ asset('storage/' . $path) }}" target="_blank" class="flex items-center text-sm text-indigo-600 hover:text-indigo-800">
+                                        <i class="fas fa-paperclip mr-2"></i>
+                                        {{ ucfirst($key) }} (Klik untuk lihat)
+                                    </a>
+                                </li>
+                                @elseif(is_array($path))
+                                    @foreach($path as $index => $subPath)
+                                    <li>
+                                        <a href="{{ asset('storage/' . $subPath) }}" target="_blank" class="flex items-center text-sm text-indigo-600 hover:text-indigo-800">
+                                            <i class="fas fa-paperclip mr-2"></i>
+                                            {{ ucfirst($key) }} {{ $index + 1 }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        </ul>
                     </div>
                     @endif
 

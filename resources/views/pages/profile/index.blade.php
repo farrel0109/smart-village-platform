@@ -8,22 +8,22 @@
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">Profil Saya</h1>
-            <p class="mt-1 text-gray-600">Informasi akun dan pengaturan</p>
+            <h1 class="text-3xl font-black text-dark-grey dark:text-white">Profil Saya</h1>
+            <p class="mt-1 text-text-secondary dark:text-gray-400">Informasi akun dan pengaturan</p>
         </div>
 
         <nav class="text-sm mt-3 sm:mt-0" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-gray-500">
+            <ol class="flex items-center space-x-2 text-text-secondary dark:text-gray-400">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}" class="text-indigo-600 hover:underline">
-                        <i class="fas fa-home"></i>
+                    <a href="{{ auth()->user()->role->name === 'user' ? route('user.dashboard') : route('admin.dashboard') }}" class="text-primary hover:underline">
+                        <span class="material-symbols-outlined text-[20px]">home</span>
                     </a>
                 </li>
                 <li>
-                    <i class="fas fa-chevron-right text-xs"></i>
+                    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
                 </li>
                 <li>
-                    <span class="font-medium text-gray-700">Profil</span>
+                    <span class="font-bold text-dark-grey dark:text-white">Profil</span>
                 </li>
             </ol>
         </nav>
@@ -32,34 +32,40 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Profile Information -->
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="p-6 border-b border-gray-200 flex items-center justify-between">
-                    <h2 class="text-xl font-semibold text-gray-800">Informasi Profil</h2>
-                    <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                        <i class="fas fa-edit mr-2"></i>Edit Profil
+            <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+                <div class="p-6 border-b border-border-light dark:border-border-dark flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-dark-grey dark:text-white">Informasi Profil</h2>
+                    <a href="{{ route('profile.edit') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-bold text-sm">
+                        <span class="material-symbols-outlined text-[18px]">edit</span>Edit Profil
                     </a>
                 </div>
                 
                 <div class="p-6">
-                    <div class="space-y-4">
+                    <div class="space-y-5">
                         <div>
-                            <label class="text-sm font-medium text-gray-500">Nama Lengkap</label>
-                            <p class="mt-1 text-lg text-gray-800">{{ $user->name }}</p>
+                            <label class="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">Nama Lengkap</label>
+                            <p class="mt-1 text-lg font-bold text-dark-grey dark:text-white">{{ $user->name }}</p>
                         </div>
 
                         <div>
-                            <label class="text-sm font-medium text-gray-500">Email</label>
-                            <p class="mt-1 text-lg text-gray-800">{{ $user->email }}</p>
+                            <label class="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">Email</label>
+                            <p class="mt-1 text-lg text-dark-grey dark:text-white">{{ $user->email }}</p>
                         </div>
 
                         <div>
-                            <label class="text-sm font-medium text-gray-500">Role</label>
-                            <p class="mt-1">
-                                <span class="px-3 py-1 text-sm font-semibold rounded-full 
-                                    @if($user->role->name === 'superadmin') bg-purple-100 text-purple-800
-                                    @elseif($user->role->name === 'admin') bg-blue-100 text-blue-800
-                                    @else bg-green-100 text-green-800
+                            <label class="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">Role</label>
+                            <p class="mt-2">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-bold rounded-full 
+                                    @if($user->role->name === 'superadmin') bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400
+                                    @elseif($user->role->name === 'admin') bg-sky-blue/10 text-sky-blue
+                                    @else bg-primary/10 text-primary
                                     @endif">
+                                    <span class="material-symbols-outlined text-[16px]">
+                                        @if($user->role->name === 'superadmin') verified_user
+                                        @elseif($user->role->name === 'admin') admin_panel_settings
+                                        @else person
+                                        @endif
+                                    </span>
                                     {{ ucfirst($user->role->name) }}
                                 </span>
                             </p>
@@ -67,27 +73,36 @@
 
                         @if($user->village)
                         <div>
-                            <label class="text-sm font-medium text-gray-500">Desa</label>
-                            <p class="mt-1 text-lg text-gray-800">{{ $user->village->name }}</p>
+                            <label class="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">Desa</label>
+                            <p class="mt-1 text-lg text-dark-grey dark:text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">location_city</span>
+                                {{ $user->village->name }}
+                            </p>
                         </div>
                         @endif
 
                         <div>
-                            <label class="text-sm font-medium text-gray-500">Status Akun</label>
-                            <p class="mt-1">
-                                <span class="px-3 py-1 text-sm font-semibold rounded-full 
-                                    @if($user->status === 'approved') bg-green-100 text-green-800
+                            <label class="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">Status Akun</label>
+                            <p class="mt-2">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-bold rounded-full 
+                                    @if($user->status === 'approved') bg-primary/10 text-primary
                                     @elseif($user->status === 'pending' || $user->status === 'submitted') bg-yellow-100 text-yellow-800
                                     @else bg-red-100 text-red-800
                                     @endif">
+                                    <span class="material-symbols-outlined text-[16px]">
+                                        @if($user->status === 'approved') check_circle
+                                        @elseif($user->status === 'pending' || $user->status === 'submitted') schedule
+                                        @else cancel
+                                        @endif
+                                    </span>
                                     {{ ucfirst($user->status) }}
                                 </span>
                             </p>
                         </div>
 
                         <div>
-                            <label class="text-sm font-medium text-gray-500">Terdaftar Sejak</label>
-                            <p class="mt-1 text-lg text-gray-800">{{ $user->created_at->format('d F Y') }}</p>
+                            <label class="text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">Terdaftar Sejak</label>
+                            <p class="mt-1 text-lg text-dark-grey dark:text-white">{{ $user->created_at->format('d F Y') }}</p>
                         </div>
                     </div>
                 </div>
@@ -96,42 +111,52 @@
 
         <!-- Quick Actions -->
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800">Pengaturan</h2>
+            <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+                <div class="p-6 border-b border-border-light dark:border-border-dark">
+                    <h2 class="text-lg font-bold text-dark-grey dark:text-white">Pengaturan</h2>
                 </div>
                 
-                <div class="p-6">
-                    <div class="space-y-3">
-                        <a href="{{ route('profile.edit') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                            <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-user-edit text-indigo-600"></i>
+                <div class="p-4">
+                    <div class="space-y-2">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+                            <div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined">person_edit</span>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-800">Edit Profil</p>
-                                <p class="text-xs text-gray-500">Ubah informasi akun</p>
+                                <p class="text-sm font-bold text-dark-grey dark:text-white">Edit Profil</p>
+                                <p class="text-xs text-text-secondary dark:text-gray-400">Ubah informasi akun</p>
                             </div>
                         </a>
 
-                        <a href="{{ route('profile.edit') }}#password" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                            <div class="flex-shrink-0 w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-key text-yellow-600"></i>
+                        <a href="{{ route('profile.edit') }}#password" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+                            <div class="size-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center text-yellow-600 dark:text-yellow-400 group-hover:bg-yellow-500 group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined">key</span>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-800">Ubah Password</p>
-                                <p class="text-xs text-gray-500">Keamanan akun</p>
+                                <p class="text-sm font-bold text-dark-grey dark:text-white">Ubah Password</p>
+                                <p class="text-xs text-text-secondary dark:text-gray-400">Keamanan akun</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('two-factor.index') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+                            <div class="size-10 bg-sky-blue/10 rounded-lg flex items-center justify-center text-sky-blue group-hover:bg-sky-blue group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined">security</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-bold text-dark-grey dark:text-white">Two-Factor Auth</p>
+                                <p class="text-xs text-text-secondary dark:text-gray-400">Keamanan tambahan</p>
                             </div>
                         </a>
 
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="w-full flex items-center p-3 rounded-lg hover:bg-red-50 transition-colors text-left">
-                                <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-sign-out-alt text-red-600"></i>
+                            <button type="submit" class="w-full flex items-center p-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left group">
+                                <div class="size-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center text-red-600 dark:text-red-400 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined">logout</span>
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-sm font-medium text-red-600">Logout</p>
-                                    <p class="text-xs text-gray-500">Keluar dari akun</p>
+                                    <p class="text-sm font-bold text-red-600 dark:text-red-400">Logout</p>
+                                    <p class="text-xs text-text-secondary dark:text-gray-400">Keluar dari akun</p>
                                 </div>
                             </button>
                         </form>
@@ -139,20 +164,23 @@
                 </div>
             </div>
 
-            <!-- Account Info -->
-            <div class="mt-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-md text-white p-6">
+            <!-- Account Card -->
+            <div class="mt-6 bg-gradient-to-br from-primary to-primary-hover rounded-xl shadow-lg text-white p-6">
                 <div class="flex items-center mb-4">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-2xl font-bold">
+                    <div class="size-16 bg-white/20 rounded-full flex items-center justify-center text-2xl font-black">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                     <div class="ml-4">
-                        <p class="font-semibold text-lg">{{ $user->name }}</p>
-                        <p class="text-sm text-indigo-100">{{ $user->email }}</p>
+                        <p class="font-bold text-lg">{{ $user->name }}</p>
+                        <p class="text-sm text-white/80">{{ $user->email }}</p>
                     </div>
                 </div>
-                <div class="border-t border-white border-opacity-20 pt-4">
-                    <p class="text-xs text-indigo-100">Akun Terverifikasi</p>
-                    <p class="text-sm font-medium mt-1">✓ Status: {{ ucfirst($user->status) }}</p>
+                <div class="border-t border-white/20 pt-4">
+                    <p class="text-xs text-white/70">Akun Terverifikasi</p>
+                    <p class="text-sm font-bold mt-1 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">verified</span>
+                        Status: {{ ucfirst($user->status) }}
+                    </p>
                 </div>
             </div>
         </div>

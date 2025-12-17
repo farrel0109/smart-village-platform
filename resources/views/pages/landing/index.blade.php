@@ -1,265 +1,209 @@
-@extends('layouts.landing')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ config('app.name', 'Desa Pintar') }} - Pelayanan Desa Digital</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-@section('title', 'Desa Pintar - Digitalisasi Administrasi Desa dalam Genggaman Anda')
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="font-display antialiased text-dark-grey bg-background-light dark:bg-background-dark dark:text-white">
+    
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-border-light dark:border-border-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="size-8 text-primary">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-xl text-dark-grey dark:text-white">Desa Pintar</span>
+                </div>
 
-@section('content')
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#beranda" class="text-earth hover:text-primary dark:text-gray-300 dark:hover:text-white font-medium transition-colors">Beranda</a>
+                    <a href="#layanan" class="text-earth hover:text-primary dark:text-gray-300 dark:hover:text-white font-medium transition-colors">Layanan</a>
+                    <a href="#tentang" class="text-earth hover:text-primary dark:text-gray-300 dark:hover:text-white font-medium transition-colors">Tentang</a>
+                </div>
+
+                <!-- Auth Buttons -->
+                <div class="flex items-center gap-3">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="px-5 py-2.5 text-sm font-bold text-white bg-primary rounded-full hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="px-5 py-2.5 text-sm font-bold text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors">
+                            Masuk
+                        </a>
+                        <a href="{{ route('register') }}" class="hidden sm:inline-flex px-5 py-2.5 text-sm font-bold text-white bg-primary rounded-full hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
+                            Daftar
+                        </a>
+                    @endauth
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
-    <section class="hero-pattern min-h-screen flex items-center pt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
-                <div class="text-white">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-                        Digitalisasi Administrasi Desa dalam
-                        <span class="text-yellow-300">Genggaman Anda</span>
-                    </h1>
-                    <p class="text-lg md:text-xl text-indigo-100 mb-8 leading-relaxed">
-                        Desa Pintar membantu desa mengelola data penduduk, layanan administrasi, dan informasi desa secara digital, efisien, dan terintegrasi.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-gray-100 transition-colors shadow-lg text-center">
-                            <i class="fas fa-rocket mr-2"></i> Daftar Sekarang
-                        </a>
-                        <a href="#features" class="px-8 py-4 border-2 border-white text-white rounded-xl font-bold hover:bg-white hover:text-indigo-600 transition-colors text-center">
-                            <i class="fas fa-info-circle mr-2"></i> Pelajari Lebih Lanjut
-                        </a>
-                    </div>
-
-                    <!-- Stats -->
-                    <div class="grid grid-cols-2 gap-6 mt-12">
-                        <div class="bg-white/10 backdrop-blur rounded-xl p-4">
-                            <div class="text-3xl font-bold text-yellow-300">{{ $stats['villages'] ?? 0 }}+</div>
-                            <div class="text-indigo-100">Desa Terdaftar</div>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur rounded-xl p-4">
-                            <div class="text-3xl font-bold text-yellow-300">{{ $stats['features'] ?? 5 }}</div>
-                            <div class="text-indigo-100">Fitur Utama</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Illustration -->
-                <div class="hidden lg:block">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-br from-yellow-300/20 to-transparent rounded-3xl"></div>
-                        <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-white rounded-xl p-4 shadow-lg">
-                                    <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center mb-3">
-                                        <i class="fas fa-users text-indigo-600"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-gray-800">Data Penduduk</h4>
-                                    <p class="text-sm text-gray-500">Kelola data warga</p>
-                                </div>
-                                <div class="bg-white rounded-xl p-4 shadow-lg">
-                                    <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center mb-3">
-                                        <i class="fas fa-file-alt text-green-600"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-gray-800">Layanan Surat</h4>
-                                    <p class="text-sm text-gray-500">Pengajuan online</p>
-                                </div>
-                                <div class="bg-white rounded-xl p-4 shadow-lg">
-                                    <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center mb-3">
-                                        <i class="fas fa-chart-bar text-yellow-600"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-gray-800">Statistik</h4>
-                                    <p class="text-sm text-gray-500">Laporan visual</p>
-                                </div>
-                                <div class="bg-white rounded-xl p-4 shadow-lg">
-                                    <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center mb-3">
-                                        <i class="fas fa-bell text-red-600"></i>
-                                    </div>
-                                    <h4 class="font-semibold text-gray-800">Notifikasi</h4>
-                                    <p class="text-sm text-gray-500">Informasi desa</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <section id="beranda" class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-dark-grey">
+        <!-- Background Image & Gradient (Matches Login Page) -->
+        <div class="absolute inset-0 bg-cover bg-center z-0 scale-105" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop');"></div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-dark-grey via-primary/80 to-sky-blue/40 z-10 mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-dark-grey via-transparent to-transparent z-10 opacity-80"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-20">
+            <span class="inline-block py-1 px-3 rounded-full bg-white/10 backdrop-blur-md text-white text-sm font-bold mb-6 border border-white/20">
+                🚀 Sistem Informasi Desa Digital Terpadu
+            </span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight drop-shadow-lg">
+                Inovasi Desa, <br class="hidden md:block">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-sky-200">Masa Depan Warga.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed font-medium drop-shadow-md">
+                Portal layanan digital terpadu yang menghubungkan kearifan lokal dengan teknologi masa depan untuk kemajuan bersama.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 py-4 text-base font-bold text-primary bg-white rounded-full hover:bg-gray-50 transition-all shadow-xl shadow-black/20 transform hover:-translate-y-1">
+                    Mulai Sekarang
+                </a>
+                <a href="#layanan" class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/20 transition-all">
+                    Pelajari Lebih Lanjut
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
+    <section id="layanan" class="py-20 bg-white dark:bg-surface-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Fitur Unggulan</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Semua yang anda butuhkan untuk mengelola administrasi desa dalam satu platform terintegrasi
-                </p>
+                <h2 class="text-3xl font-bold text-dark-grey dark:text-white mb-4">Layanan Unggulan</h2>
+                <p class="text-text-secondary dark:text-text-secondary-dark max-w-2xl mx-auto">Kami menghadirkan berbagai fitur untuk memudahkan warga dalam berinteraksi dengan pemerintah desa.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="group p-6 bg-gray-50 rounded-2xl hover:bg-indigo-600 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                        <i class="fas fa-users text-2xl text-white group-hover:text-indigo-600"></i>
+                <div class="bg-background-light dark:bg-background-dark p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-border-light dark:border-border-dark group">
+                    <div class="w-14 h-14 bg-sky-blue/10 rounded-xl flex items-center justify-center text-sky-blue text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">description</span>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-white">Manajemen Penduduk</h3>
-                    <p class="text-gray-600 group-hover:text-indigo-100">
-                        Kelola data penduduk lengkap dengan NIK, alamat, status, dan informasi keluarga.
+                    <h3 class="text-xl font-bold text-dark-grey dark:text-white mb-3">Surat Online</h3>
+                    <p class="text-text-secondary dark:text-text-secondary-dark leading-relaxed">
+                        Ajukan surat keterangan usaha, domisili, kelahiran, dan lainnya langsung dari smartphone Anda tanpa antri.
                     </p>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="group p-6 bg-gray-50 rounded-2xl hover:bg-indigo-600 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                        <i class="fas fa-file-signature text-2xl text-white group-hover:text-indigo-600"></i>
+                <div class="bg-background-light dark:bg-background-dark p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-border-light dark:border-border-dark group">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">groups</span>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-white">Layanan Surat</h3>
-                    <p class="text-gray-600 group-hover:text-indigo-100">
-                        Pengajuan surat keterangan, domisili, SKTM secara online dan cepat.
+                    <h3 class="text-xl font-bold text-dark-grey dark:text-white mb-3">Data Kependudukan</h3>
+                    <p class="text-text-secondary dark:text-text-secondary-dark leading-relaxed">
+                        Pengelolaan data penduduk dan keluarga yang terintegrasi, aman, dan selalu terupdate secara real-time.
                     </p>
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="group p-6 bg-gray-50 rounded-2xl hover:bg-indigo-600 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                        <i class="fas fa-chart-pie text-2xl text-white group-hover:text-indigo-600"></i>
+                <div class="bg-background-light dark:bg-background-dark p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-border-light dark:border-border-dark group">
+                    <div class="w-14 h-14 bg-earth/10 rounded-xl flex items-center justify-center text-earth text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">analytics</span>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-white">Dashboard & Statistik</h3>
-                    <p class="text-gray-600 group-hover:text-indigo-100">
-                        Visualisasi data kependudukan dan laporan statistik yang informatif.
-                    </p>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="group p-6 bg-gray-50 rounded-2xl hover:bg-indigo-600 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                        <i class="fas fa-mobile-alt text-2xl text-white group-hover:text-indigo-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-white">Akses Mobile</h3>
-                    <p class="text-gray-600 group-hover:text-indigo-100">
-                        Akses dari mana saja melalui smartphone atau komputer.
-                    </p>
-                </div>
-
-                <!-- Feature 5 -->
-                <div class="group p-6 bg-gray-50 rounded-2xl hover:bg-indigo-600 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                        <i class="fas fa-shield-alt text-2xl text-white group-hover:text-indigo-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-white">Keamanan Data</h3>
-                    <p class="text-gray-600 group-hover:text-indigo-100">
-                        Data terenkripsi dan aman dengan sistem autentikasi berlapis.
-                    </p>
-                </div>
-
-                <!-- Feature 6 -->
-                <div class="group p-6 bg-gray-50 rounded-2xl hover:bg-indigo-600 transition-all duration-300">
-                    <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                        <i class="fas fa-headset text-2xl text-white group-hover:text-indigo-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-white">Dukungan 24/7</h3>
-                    <p class="text-gray-600 group-hover:text-indigo-100">
-                        Tim support siap membantu kapanpun anda membutuhkan.
+                    <h3 class="text-xl font-bold text-dark-grey dark:text-white mb-3">Transparansi Data</h3>
+                    <p class="text-text-secondary dark:text-text-secondary-dark leading-relaxed">
+                        Akses informasi statistik desa, anggaran, dan laporan pembangunan sebagai wujud transparansi publik.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Cara Kerja</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Mulai gunakan Desa Pintar dalam 3 langkah mudah
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Step 1 -->
-                <div class="relative">
-                    <div class="flex items-center justify-center w-16 h-16 rounded-full gradient-bg text-white text-2xl font-bold mx-auto mb-6">
-                        1
-                    </div>
-                    <h3 class="text-xl font-bold text-center text-gray-900 mb-2">Daftar Akun</h3>
-                    <p class="text-center text-gray-600">
-                        Daftarkan desa atau diri anda sebagai warga dengan memilih lokasi desa.
-                    </p>
+    <!-- Stats Section -->
+    <section class="py-20 bg-dark-grey text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-sky-blue/20 mix-blend-overlay"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-black mb-2 text-primary">1,200+</div>
+                    <div class="text-gray-300 text-sm font-bold uppercase tracking-wider">Penduduk</div>
                 </div>
-
-                <!-- Arrow -->
-                <div class="hidden md:block absolute left-1/3 top-8 w-1/3">
-                    <div class="border-t-2 border-dashed border-indigo-300"></div>
+                <div>
+                    <div class="text-4xl font-black mb-2 text-sky-blue">350+</div>
+                    <div class="text-gray-300 text-sm font-bold uppercase tracking-wider">Kepala Keluarga</div>
                 </div>
-
-                <!-- Step 2 -->
-                <div class="relative">
-                    <div class="flex items-center justify-center w-16 h-16 rounded-full gradient-bg text-white text-2xl font-bold mx-auto mb-6">
-                        2
-                    </div>
-                    <h3 class="text-xl font-bold text-center text-gray-900 mb-2">Verifikasi Admin</h3>
-                    <p class="text-center text-gray-600">
-                        Admin desa akan memverifikasi data anda untuk keamanan.
-                    </p>
+                <div>
+                    <div class="text-4xl font-black mb-2 text-primary">50+</div>
+                    <div class="text-gray-300 text-sm font-bold uppercase tracking-wider">Layanan Surat</div>
                 </div>
-
-                <!-- Step 3 -->
-                <div class="relative">
-                    <div class="flex items-center justify-center w-16 h-16 rounded-full gradient-bg text-white text-2xl font-bold mx-auto mb-6">
-                        3
-                    </div>
-                    <h3 class="text-xl font-bold text-center text-gray-900 mb-2">Mulai Menggunakan</h3>
-                    <p class="text-center text-gray-600">
-                        Akses semua fitur sesuai dengan role anda (Admin/Warga).
-                    </p>
+                <div>
+                    <div class="text-4xl font-black mb-2 text-sky-blue">24/7</div>
+                    <div class="text-gray-300 text-sm font-bold uppercase tracking-wider">Akses Sistem</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Villages Section -->
-    <section id="villages" class="py-20 bg-white">
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-surface-dark border-t border-border-light dark:border-border-dark pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Desa Terdaftar</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Desa-desa yang sudah menggunakan Desa Pintar
-                </p>
-            </div>
-
-            @if($villages->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @foreach($villages as $village)
-                        <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow">
-                            <div class="w-12 h-12 rounded-lg gradient-bg flex items-center justify-center mb-4">
-                                <i class="fas fa-building text-white"></i>
-                            </div>
-                            <h4 class="font-bold text-gray-900">{{ $village->name }}</h4>
-                            <p class="text-sm text-gray-500">{{ $village->regency }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="size-8 text-primary">
+                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+                            </svg>
                         </div>
-                    @endforeach
+                        <span class="font-bold text-xl text-dark-grey dark:text-white">Desa Pintar</span>
+                    </div>
+                    <p class="text-text-secondary dark:text-text-secondary-dark leading-relaxed max-w-md">
+                        Platform digital untuk memodernisasi pelayanan administrasi desa di Indonesia. Mewujudkan desa yang maju, mandiri, dan sejahtera.
+                    </p>
                 </div>
-            @else
-                <div class="text-center py-12">
-                    <i class="fas fa-building text-gray-300 text-5xl mb-4"></i>
-                    <p class="text-gray-500">Belum ada desa terdaftar</p>
+                
+                <div>
+                    <h4 class="font-bold text-dark-grey dark:text-white mb-4">Tautan</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-text-secondary hover:text-primary dark:text-text-secondary-dark dark:hover:text-white transition-colors">Beranda</a></li>
+                        <li><a href="#" class="text-text-secondary hover:text-primary dark:text-text-secondary-dark dark:hover:text-white transition-colors">Layanan</a></li>
+                        <li><a href="#" class="text-text-secondary hover:text-primary dark:text-text-secondary-dark dark:hover:text-white transition-colors">Tentang Kami</a></li>
+                        <li><a href="#" class="text-text-secondary hover:text-primary dark:text-text-secondary-dark dark:hover:text-white transition-colors">Kontak</a></li>
+                    </ul>
                 </div>
-            @endif
-        </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 gradient-bg">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                Siap Digitalisasi Desa Anda?
-            </h2>
-            <p class="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
-                Bergabunglah dengan desa-desa lain yang sudah merasakan kemudahan Desa Pintar dalam mengelola administrasi.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-gray-100 transition-colors shadow-lg">
-                    <i class="fas fa-user-plus mr-2"></i> Daftar Sebagai Warga
-                </a>
-                <a href="mailto:info@desapintar.id" class="px-8 py-4 border-2 border-white text-white rounded-xl font-bold hover:bg-white hover:text-indigo-600 transition-colors">
-                    <i class="fas fa-envelope mr-2"></i> Hubungi Kami
-                </a>
+                <div>
+                    <h4 class="font-bold text-dark-grey dark:text-white mb-4">Kontak</h4>
+                    <ul class="space-y-2 text-text-secondary dark:text-text-secondary-dark">
+                        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">location_on</span> Kantor Kepala Desa</li>
+                        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">mail</span> admin@desapintar.id</li>
+                        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">call</span> (021) 1234-5678</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-border-light dark:border-border-dark pt-8 text-center">
+                <p class="text-text-secondary dark:text-gray-500 text-sm">
+                    &copy; {{ date('Y') }} Desa Pintar. Hak Cipta Dilindungi Undang-Undang.
+                </p>
             </div>
         </div>
-    </section>
-@endsection
+    </footer>
+
+</body>
+</html>

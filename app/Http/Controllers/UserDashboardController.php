@@ -39,19 +39,6 @@ class UserDashboardController extends Controller
     }
 
     /**
-     * Show all user's letters.
-     */
-    public function letters()
-    {
-        $letters = LetterRequest::with('letterType')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->paginate(15);
-
-        return view('pages.user.letters', compact('letters'));
-    }
-
-    /**
      * Show public announcements list.
      */
     public function announcements()
