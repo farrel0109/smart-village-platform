@@ -2,102 +2,120 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
+use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Tampilkan halaman login
+    /**
+     * Default role for new users
+     */
+    private const DEFAULT_ROLE_NAME = 'user';
+
+    /**
+     * Show login page.
+     */
     public function login()
     {
-        if (Auth::check()) {
-            return redirect()->route('dashboard'); // Jika sudah login, langsung ke dashboard
-        }
-
         return view('pages.auth.login');
     }
 
-    // Proses autentikasi
+    /**
+     * Handle authentication attempt.
+     */
     public function authenticate(Request $request)
     {
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
-
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            $userStatus = Auth::user()->status;
-
-            if ($userStatus === 'submitted') {
-                Auth::logout();
-                return back()->with('status_modal', 'submitted');
-            }
-
-            if ($userStatus === 'rejected') {
-                Auth::logout();
-                return back()->with('status_modal', 'rejected');
-            }
-
-            if ($userStatus === 'approved') {
-                return redirect()->intended(route('dashboard'));
-            }
+        if (!Auth::attempt($credentials)) {
+            return back()->with('status_modal', 'invalid');
         }
 
-        return back()->with('status_modal', 'invalid');
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        // Check user status
+        if ($user->status !== 'approved') {
+            Auth::logout();
+            return back()->with('status_modal', $user->status);
+        }
+
+        // Redirect based on role
+        return $this->redirectBasedOnRole($user);
     }
 
-    // Logout user
+    /**
+     * Redirect user based on their role.
+     */
+    private function redirectBasedOnRole($user)
+    {
+        $roleName = $user->role?->name;
+
+        return match($roleName) {
+            'superadmin', 'admin' => redirect()->route('admin.dashboard'),
+            'user' => redirect()->route('user.dashboard'),
+            default => redirect()->route('landing'),
+        };
+    }
+
+    /**
+     * Logout user.
+     */
     public function logout(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect('/');
-        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('landing');
     }
 
-    // Tampilkan halaman register
+    /**
+     * Show register page.
+     */
     public function registerView()
     {
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
+        $villages = Village::where('is_active', true)
+            ->orderBy('regency')
+            ->orderBy('name')
+            ->get();
 
-        return view('pages.auth.register');
+        return view('pages.auth.register', compact('villages'));
     }
 
-    // Proses register
+    /**
+     * Handle user registration.
+     */
     public function register(Request $request)
     {
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
-
         $validated = $request->validate([
-            'name' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6'],
+            'village_id' => ['required', 'exists:villages,id'],
         ]);
 
-        $user = new User();
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->password = Hash::make($validated['password']);
-        $user->role_id = 2; // Role default sebagai penduduk
-        $user->status = 'submitted'; // Status default saat register
-        $user->saveOrFail();
+        // Get default role ID
+        $defaultRoleId = Role::where('name', self::DEFAULT_ROLE_NAME)->value('id') ?? 3;
 
-        return redirect('/')->with('success', 'Berhasil mendaftarkan akun, silakan menunggu persetujuan admin.');
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role_id' => $defaultRoleId,
+            'village_id' => $validated['village_id'],
+            'status' => 'submitted',
+        ]);
+
+        return redirect()->route('login')
+            ->with('success', 'Pendaftaran berhasil! Silakan tunggu verifikasi dari admin desa.');
     }
 }

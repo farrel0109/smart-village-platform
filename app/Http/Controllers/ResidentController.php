@@ -2,76 +2,104 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResidentRequest;
 use App\Models\Resident;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class ResidentController extends Controller
 {
-public function index()
+    /**
+     * Display a listing of the resource with pagination.
+     */
+    public function index()
     {
-        // Make sure to fetch the data and pass it to the view
-        $residents = Resident::all(); // or any other query you need
-        
-        // Alternative: if you want to handle potential null cases
-        // $residents = Resident::all() ?? collect();
-        
+        $residents = Resident::orderBy('created_at', 'desc')->paginate(15);
         return view('pages.resident.index', compact('residents'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('pages.resident.create');
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ResidentRequest $request)
     {
-        $validatedData = $request->validate([
-            'nik' => ['required', 'min:16', 'max:16'],
-            'name' => ['required', 'max:100'],
-            'gender' => ['required', Rule::in(['male', 'female'])],
-            'birth_date' => ['required', 'string'],
-            'birth_place' => ['required', 'max:100'],
-            'address' => ['required', 'max:700'],
-            'religion' => ['nullable', 'max:50'],
-            'marital_status' => ['required', Rule::in(['single', 'married', 'divorced', 'widowed'])],
-            'occupation' => ['nullable', 'max:100'],
-            'phone' => ['nullable', 'max:15'],
-            'status' => ['required', Rule::in(['active', 'moved', 'deceased'])],
-        ]);
-        Resident::create($validatedData);
+        $data = $request->validated();
 
-        return redirect('/resident')->with('success', 'berhasil menambahkan data penduduk');
-    }
-        public function edit ($id)
-    {
-        $resident = Resident::findOrFail($id);
-return view('pages.resident.edit' ,['resident' => $resident]);
-    }
-    public function update(Request $request, $id)
-    {
-            $validatedData = $request->validate([
-            'nik' => ['required', 'min:16', 'max:16'],
-            'name' => ['required', 'max:100'],
-            'gender' => ['required', Rule::in(['male', 'female'])],
-            'birth_date' => ['required', 'string'],
-            'birth_place' => ['required', 'max:100'],
-            'address' => ['required', 'max:700'],
-            'religion' => ['nullable', 'max:50'],
-            'marital_status' => ['required', Rule::in(['single', 'married', 'divorced', 'widowed'])],
-            'occupation' => ['nullable', 'max:100'],
-            'phone' => ['nullable', 'max:15'],
-            'status' => ['required', Rule::in(['active', 'moved', 'deceased'])],
-        ]);
-        Resident::findOrFail($id)->update($validatedData);
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('residents', 'public');
+        }
 
-        return redirect('/resident')->with('success', 'berhasil mengubah data penduduk');
-    }    
-    public function destroy($id)
+        Resident::create($data);
+
+        return redirect()->route('residents.index')
+            ->with('success', 'Data penduduk berhasil ditambahkan.');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Resident $resident)
     {
-        $resident = Resident::findOrFail($id);
+        return view('pages.resident.edit', compact('resident'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ResidentRequest $request, Resident $resident)
+    {
+        $data = $request->validated();
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo
+            if ($resident->photo && Storage::disk('public')->exists($resident->photo)) {
+                Storage::disk('public')->delete($resident->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('residents', 'public');
+        }
+
+        $resident->update($data);
+
+        return redirect()->route('residents.index')
+            ->with('success', 'Data penduduk berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Resident $resident)
+    {
+        // Delete photo
+        if ($resident->photo && Storage::disk('public')->exists($resident->photo)) {
+            Storage::disk('public')->delete($resident->photo);
+        }
+
         $resident->delete();
 
-        return redirect('/resident')->with('success', 'Resident deleted successfully.');
+        return redirect()->route('residents.index')
+            ->with('success', 'Data penduduk berhasil dihapus.');
+    }
+
+    /**
+     * Remove resident photo.
+     */
+    public function removePhoto(Resident $resident)
+    {
+        if ($resident->photo && Storage::disk('public')->exists($resident->photo)) {
+            Storage::disk('public')->delete($resident->photo);
+        }
+        
+        $resident->update(['photo' => null]);
+
+        return back()->with('success', 'Foto berhasil dihapus.');
     }
 }

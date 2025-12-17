@@ -1,146 +1,160 @@
 @extends('layouts.app')
+
+@section('title', 'Edit Penduduk - Sistem Desa')
+
+@section('page-title', 'Edit Penduduk')
+
 @section('content')
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Tambah Penduduk</h1>
-
-</div>
-{{-- Form --}}
-<div class="row">
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                <form method="POST" action="{{ route('resident.update', $resident->id) }}">
-    @csrf
-    @method('PUT')
-
-    {{-- NIK --}}
-    <div class="form-group mb-3">
-        <label for="nik">NIK</label>
-        <input type="text" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik', $resident->nik) }}">
-        @error('nik')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Nama Lengkap --}}
-    <div class="form-group mb-3">
-        <label for="name">Nama Lengkap</label>
-        <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $resident->name) }}">
-        @error('name')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Jenis Kelamin --}}
-    <div class="form-group mb-3">
-        <label for="gender">Jenis Kelamin</label>
-        <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror">
-            <option value="male" {{ old('gender', $resident->gender) == 'male' ? 'selected' : '' }}>Laki-laki</option>
-            <option value="female" {{ old('gender', $resident->gender) == 'female' ? 'selected' : '' }}>Perempuan</option>
-        </select>
-        @error('gender')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Tempat Lahir --}}
-    <div class="form-group mb-3">
-        <label for="birth_place">Tempat Lahir</label>
-        <input type="text" name="birth_place" id="birth_place" class="form-control @error('birth_place') is-invalid @enderror" value="{{ old('birth_place', $resident->birth_place) }}">
-        @error('birth_place')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Tanggal Lahir --}}
-    <div class="form-group mb-3">
-        <label for="birth_date">Tanggal Lahir</label>
-        <input type="date" name="birth_date" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date', $resident->birth_date) }}">
-        @error('birth_date')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Alamat --}}
-    <div class="form-group mb-3">
-        <label for="address">Alamat</label>
-        <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror">{{ old('address', $resident->address) }}</textarea>
-        @error('address')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Agama --}}
-    <div class="form-group mb-3">
-        <label for="religion">Agama</label>
-        <input type="text" name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror" value="{{ old('religion', $resident->religion) }}">
-        @error('religion')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Status Pernikahan --}}
-    <div class="form-group mb-3">
-        <label for="marital_status">Status Pernikahan</label>
-        <select name="marital_status" id="marital_status" class="form-control @error('marital_status') is-invalid @enderror">
-            <option value="single" {{ old('marital_status', $resident->marital_status) == 'single' ? 'selected' : '' }}>Belum Menikah</option>
-            <option value="married" {{ old('marital_status', $resident->marital_status) == 'married' ? 'selected' : '' }}>Menikah</option>
-            <option value="divorced" {{ old('marital_status', $resident->marital_status) == 'divorced' ? 'selected' : '' }}>Cerai</option>
-            <option value="widowed" {{ old('marital_status', $resident->marital_status) == 'widowed' ? 'selected' : '' }}>Duda/Janda</option>
-        </select>
-        @error('marital_status')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Pekerjaan --}}
-    <div class="form-group mb-3">
-        <label for="occupation">Pekerjaan</label>
-        <input type="text" name="occupation" id="occupation" class="form-control @error('occupation') is-invalid @enderror" value="{{ old('occupation', $resident->occupation) }}">
-        @error('occupation')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- No. Telepon --}}
-    <div class="form-group mb-3">
-        <label for="phone">No. Telepon</label>
-        <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $resident->phone) }}">
-        @error('phone')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-
-    {{-- Status --}}
-    <div class="form-group mb-3">
-        <label for="status">Status Penduduk</label>
-        <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
-            <option value="active" {{ old('status', $resident->status) == 'active' ? 'selected' : '' }}>Aktif</option>
-            <option value="moved" {{ old('status', $resident->status) == 'moved' ? 'selected' : '' }}>Pindah</option>
-            <option value="deceased" {{ old('status', $resident->status) == 'deceased' ? 'selected' : '' }}>Meninggal</option>
-        </select>
-        @error('status')
-            <span class="invalid-feedback">{{ $message }}</span>
-        @enderror
-    </div>
-<div class="card-footer text-right">
-                            <div class="d-flex justify-content-end" style="gap: 10px;">
-                                {{-- Tombol Kembali (link) --}}
-                                <a href="/resident" class="btn btn-sm btn-outline-secondary shadow-sm">
-                                    <i class="text-white-50"></i> Kembali
-                                </a>
-                                {{-- Tombol Simpan (submit) --}}
-                                <button type="submit" class="btn btn-sm btn-warning shadow-sm">
-                                    <i class="text-white-50"></i> Simpan Perubahan
-                                </button>
-                            </div>
-                        </div>
-</form>
-
-
-            </div>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Edit Data Penduduk</h1>
+            <p class="mt-1 text-gray-600">Perbarui data penduduk: {{ $resident->name }}</p>
         </div>
+        <a href="{{ route('admin.residents.index') }}"
+           class="inline-flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors mt-4 sm:mt-0">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Kembali
+        </a>
     </div>
-</div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <form action="{{ route('admin.residents.update', $resident) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- NIK -->
+                <div>
+                    <label for="nik" class="block text-sm font-medium text-gray-700 mb-1">NIK <span class="text-red-500">*</span></label>
+                    <input type="text" name="nik" id="nik" maxlength="16" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('nik') border-red-500 @enderror"
+                           value="{{ old('nik', $resident->nik) }}" placeholder="Masukkan NIK (16 digit)">
+                    @error('nik')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Nama -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+                    <input type="text" name="name" id="name" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('name') border-red-500 @enderror"
+                           value="{{ old('name', $resident->name) }}" placeholder="Masukkan nama lengkap">
+                    @error('name')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Jenis Kelamin -->
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                    <select name="gender" id="gender" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('gender') border-red-500 @enderror">
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="male" {{ old('gender', $resident->gender) == 'male' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="female" {{ old('gender', $resident->gender) == 'female' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                    @error('gender')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Tempat Lahir -->
+                <div>
+                    <label for="birth_place" class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir <span class="text-red-500">*</span></label>
+                    <input type="text" name="birth_place" id="birth_place" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('birth_place') border-red-500 @enderror"
+                           value="{{ old('birth_place', $resident->birth_place) }}" placeholder="Masukkan tempat lahir">
+                    @error('birth_place')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Tanggal Lahir -->
+                <div>
+                    <label for="birth_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label>
+                    <input type="date" name="birth_date" id="birth_date" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('birth_date') border-red-500 @enderror"
+                           value="{{ old('birth_date', $resident->birth_date) }}">
+                    @error('birth_date')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Agama -->
+                <div>
+                    <label for="religion" class="block text-sm font-medium text-gray-700 mb-1">Agama</label>
+                    <input type="text" name="religion" id="religion"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           value="{{ old('religion', $resident->religion) }}" placeholder="Masukkan agama">
+                </div>
+
+                <!-- Status Pernikahan -->
+                <div>
+                    <label for="marital_status" class="block text-sm font-medium text-gray-700 mb-1">Status Pernikahan <span class="text-red-500">*</span></label>
+                    <select name="marital_status" id="marital_status" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('marital_status') border-red-500 @enderror">
+                        <option value="">Pilih Status</option>
+                        <option value="single" {{ old('marital_status', $resident->marital_status) == 'single' ? 'selected' : '' }}>Belum Menikah</option>
+                        <option value="married" {{ old('marital_status', $resident->marital_status) == 'married' ? 'selected' : '' }}>Menikah</option>
+                        <option value="divorced" {{ old('marital_status', $resident->marital_status) == 'divorced' ? 'selected' : '' }}>Cerai</option>
+                        <option value="widowed" {{ old('marital_status', $resident->marital_status) == 'widowed' ? 'selected' : '' }}>Duda/Janda</option>
+                    </select>
+                    @error('marital_status')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Pekerjaan -->
+                <div>
+                    <label for="occupation" class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
+                    <input type="text" name="occupation" id="occupation"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           value="{{ old('occupation', $resident->occupation) }}" placeholder="Masukkan pekerjaan">
+                </div>
+
+                <!-- No. Telepon -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">No. Telepon</label>
+                    <input type="text" name="phone" id="phone" maxlength="15"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           value="{{ old('phone', $resident->phone) }}" placeholder="Masukkan no. telepon">
+                </div>
+
+                <!-- Status -->
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status <span class="text-red-500">*</span></label>
+                    <select name="status" id="status" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('status') border-red-500 @enderror">
+                        <option value="active" {{ old('status', $resident->status) == 'active' ? 'selected' : '' }}>Aktif</option>
+                        <option value="moved" {{ old('status', $resident->status) == 'moved' ? 'selected' : '' }}>Pindah</option>
+                        <option value="deceased" {{ old('status', $resident->status) == 'deceased' ? 'selected' : '' }}>Meninggal</option>
+                    </select>
+                    @error('status')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Alamat -->
+                <div class="md:col-span-2">
+                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Alamat <span class="text-red-500">*</span></label>
+                    <textarea name="address" id="address" rows="3" required
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 @error('address') border-red-500 @enderror"
+                              placeholder="Masukkan alamat lengkap">{{ old('address', $resident->address) }}</textarea>
+                    @error('address')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end mt-6 pt-6 border-t">
+                <button type="submit"
+                        class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+                    <i class="fas fa-save mr-2"></i>
+                    Perbarui Data
+                </button>
+            </div>
+        </form>
+    </div>
 @endsection

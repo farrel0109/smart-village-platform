@@ -14,18 +14,22 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles)
     {
         if (!Auth::check()) {
-            return redirect('/login');
+            return redirect()->route('login');
         }
 
         $user = Auth::user();
+        $userRole = $user->role?->name;
 
-        // Jika user menggunakan kolom relasi ke role_id
-        $userRole = $user->role->name ?? null;
+        // Superadmin has access to everything
+        if ($userRole === 'superadmin') {
+            return $next($request);
+        }
 
+        // Check if user role matches any of the allowed roles
         if (in_array($userRole, $roles)) {
             return $next($request);
         }
 
-        return abort(403, 'Unauthorized');
+        return abort(403, 'Anda tidak memiliki akses ke halaman ini.');
     }
 }
