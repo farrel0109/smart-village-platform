@@ -13,8 +13,8 @@ class ResidentSeeder extends Seeder
      */
     public function run(): void
     {
-        $village1 = Village::where('code', 'DSA001')->first();
-        $village2 = Village::where('code', 'DSA002')->first();
+        $village1 = Village::where('village_code', 'DSA001')->first();
+        $village2 = Village::where('village_code', 'DSA002')->first();
 
         $residents = [
             // Desa Sukamaju residents

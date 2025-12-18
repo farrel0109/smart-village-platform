@@ -16,7 +16,12 @@ class DatabaseSeeder extends Seeder
             VillageSeeder::class,
             UserSeeder::class,
             ResidentSeeder::class,
+            FamilySeeder::class,
             LetterTypeSeeder::class,
+            SettingSeeder::class,
+            LetterTemplateSeeder::class,
+            AnnouncementSeeder::class,
+            LetterRequestSeeder::class,
         ]);
     }
 }

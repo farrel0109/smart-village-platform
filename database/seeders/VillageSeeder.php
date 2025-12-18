@@ -15,7 +15,7 @@ class VillageSeeder extends Seeder
         $villages = [
             [
                 'name' => 'Desa Sukamaju',
-                'code' => 'DSA001',
+                'village_code' => 'DSA001',
                 'province' => 'Sulawesi Selatan',
                 'regency' => 'Kabupaten Bone',
                 'district' => 'Kecamatan Tanete Riattang',
@@ -26,7 +26,7 @@ class VillageSeeder extends Seeder
             ],
             [
                 'name' => 'Desa Makmur Jaya',
-                'code' => 'DSA002',
+                'village_code' => 'DSA002',
                 'province' => 'Sulawesi Selatan',
                 'regency' => 'Kabupaten Bone',
                 'district' => 'Kecamatan Tanete Riattang Barat',
@@ -37,7 +37,7 @@ class VillageSeeder extends Seeder
             ],
             [
                 'name' => 'Desa Harapan Baru',
-                'code' => 'DSA003',
+                'village_code' => 'DSA003',
                 'province' => 'Sulawesi Selatan',
                 'regency' => 'Kabupaten Gowa',
                 'district' => 'Kecamatan Somba Opu',
@@ -48,7 +48,7 @@ class VillageSeeder extends Seeder
             ],
             [
                 'name' => 'Desa Sejahtera',
-                'code' => 'DSA004',
+                'village_code' => 'DSA004',
                 'province' => 'Sulawesi Selatan',
                 'regency' => 'Kota Makassar',
                 'district' => 'Kecamatan Tamalate',
@@ -61,7 +61,7 @@ class VillageSeeder extends Seeder
 
         foreach ($villages as $village) {
             Village::updateOrCreate(
-                ['code' => $village['code']],
+                ['village_code' => $village['village_code']],
                 $village
             );
         }

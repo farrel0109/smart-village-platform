@@ -48,11 +48,81 @@ Fitur keamanan tambahan dengan verifikasi 2 langkah:
 
 ### Role & Permission
 
-| Role           | Akses                                 |
-| -------------- | ------------------------------------- |
-| **Superadmin** | Akses penuh, kelola desa, kelola role |
-| **Admin**      | Kelola penduduk, surat, pengumuman    |
-| **User**       | Dashboard pribadi, ajukan surat       |
+## 👑 Alur & Fitur Berdasarkan Role
+
+### 1. Super Admin
+
+**Akses:** Full System Control
+**Fokus:** Manajemen Sistem & Wilayah
+
+#### 🔄 Alur Kerja Utama (User Flow)
+
+1.  **Setup Awal**: Login -> Manajemen Desa -> Tambah Desa Baru.
+2.  **Setup Admin**: Manajemen User -> Tambah User -> Assign Role "Admin" & Pilih Desa.
+3.  **Monitoring**: Dashboard -> Cek Statistik Global -> Activity Logs (Memantau aktivitas mencurigakan).
+4.  **Maintenance**: Backup Database -> Download SQL.
+
+#### ✨ Fitur Eksklusif
+
+-   **Manajemen Desa (`/admin/villages`)**: Membuat, mengedit, dan menonaktifkan desa dalam sistem.
+-   **Global User Management**: Mengelola seluruh user dari semua desa.
+-   **System Settings**: Pengaturan global aplikasi.
+-   **Global Activity Logs**: Melihat log aktivitas seluruh sistem.
+
+---
+
+### 2. Admin Desa
+
+**Akses:** Village Scope (Hanya data desanya sendiri)
+**Fokus:** Pelayanan Warga & Administrasi
+
+#### 🔄 Alur Kerja Utama (User Flow)
+
+1.  **Verifikasi Warga**:
+    -   Notifikasi masuk (Warga baru mendaftar).
+    -   Buka Menu **Verifikasi User**.
+    -   Cek data -> **Approve** (Warga bisa login) atau **Reject**.
+2.  **Proses Surat**:
+    -   Notifikasi masuk (Pengajuan surat baru).
+    -   Buka Menu **Layanan Surat**.
+    -   Review data & lampiran.
+    -   Ubah status: **Processing** -> Cetak/Tanda Tangan -> **Completed** (Upload file jadi).
+3.  **Manajemen Data**:
+    -   Update data **Penduduk** (Lahir, Mati, Pindah, Datang).
+    -   Update **Kartu Keluarga**.
+4.  **Informasi Publik**:
+    -   Buat **Pengumuman** baru (Jadwal Posyandu, Kerja Bakti, dll).
+
+#### ✨ Fitur Utama
+
+-   **Dashboard Desa**: Statistik khusus desanya (Total warga, surat pending, dll).
+-   **Manajemen Penduduk & KK**: CRUD data warga dalam lingkup desanya.
+-   **Layanan Surat**: Memproses pengajuan surat dari warga desanya.
+-   **Pengumuman**: Membuat info yang hanya tampil untuk warga desanya.
+-   **Laporan**: Export data penduduk/surat desanya ke CSV.
+-   **Pengaturan Desa**:
+    -   Update Info Desa (Alamat, Kontak).
+    -   Upload Logo Desa.
+    -   Atur Header/Footer Surat.
+    -   Kelola Tanda Tangan Elektronik (jika ada).
+
+---
+
+### 3. User (Warga)
+
+**Akses:** Personal Scope
+**Fokus:** Pengajuan Layanan & Informasi
+
+#### 🔄 Alur Kerja Utama
+
+1.  **Registrasi**: Daftar akun -> Tunggu verifikasi Admin.
+2.  **Pengajuan Surat**:
+    -   Login -> Menu **Ajukan Surat**.
+    -   Pilih Jenis Surat -> Isi Form -> Upload Syarat.
+    -   Pantau status di **Surat Saya**.
+3.  **Update Profil**: Melengkapi data diri & foto profil.
+
+---
 
 ---
 

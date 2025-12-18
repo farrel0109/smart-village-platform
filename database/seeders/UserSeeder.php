@@ -21,8 +21,8 @@ class UserSeeder extends Seeder
         $userRoleId = Role::where('name', 'user')->value('id') ?? 3;
 
         // Get village IDs
-        $village1 = Village::where('code', 'DSA001')->first();
-        $village2 = Village::where('code', 'DSA002')->first();
+        $village1 = Village::where('village_code', 'DSA001')->first();
+        $village2 = Village::where('village_code', 'DSA002')->first();
 
         $users = [
             // Super Admin - no village (manages all)
