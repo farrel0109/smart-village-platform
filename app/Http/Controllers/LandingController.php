@@ -11,16 +11,6 @@ class LandingController extends Controller
      */
     public function index()
     {
-        $stats = [
-            'villages' => Village::where('is_active', true)->count(),
-            'features' => 5,
-        ];
-
-        $villages = Village::where('is_active', true)
-            ->select('id', 'name', 'regency')
-            ->orderBy('name')
-            ->get();
-
-        return view('pages.landing.index', compact('stats', 'villages'));
+        return view('welcome');
     }
 }
