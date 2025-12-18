@@ -8,24 +8,27 @@
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">Tambah Kartu Keluarga</h1>
-            <p class="mt-1 text-gray-600">Daftarkan Kartu Keluarga baru</p>
+            <h1 class="text-3xl font-black text-dark-grey dark:text-white">Tambah Kartu Keluarga</h1>
+            <p class="mt-1 text-text-secondary dark:text-gray-400">Daftarkan Kartu Keluarga baru</p>
         </div>
 
         <nav class="text-sm mt-3 sm:mt-0" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-gray-500">
-                <li><a href="{{ route('admin.dashboard') }}" class="text-indigo-600 hover:underline"><i class="fas fa-home"></i></a></li>
-                <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li><a href="{{ route('admin.families.index') }}" class="text-indigo-600 hover:underline">Kartu Keluarga</a></li>
-                <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li><span class="font-medium text-gray-700">Tambah</span></li>
+            <ol class="flex items-center space-x-2 text-text-secondary dark:text-gray-400">
+                <li><a href="{{ route('admin.dashboard') }}" class="text-primary hover:underline"><span class="material-symbols-outlined text-[20px]">home</span></a></li>
+                <li><span class="material-symbols-outlined text-[16px]">chevron_right</span></li>
+                <li><a href="{{ route('admin.families.index') }}" class="text-primary hover:underline">Kartu Keluarga</a></li>
+                <li><span class="material-symbols-outlined text-[16px]">chevron_right</span></li>
+                <li><span class="font-bold text-dark-grey dark:text-white">Tambah</span></li>
             </ol>
         </nav>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <div class="p-6 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-800">Data Kartu Keluarga</h2>
+    <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+        <div class="p-6 border-b border-border-light dark:border-border-dark">
+            <h2 class="text-lg font-bold text-dark-grey dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">family_restroom</span>
+                Data Kartu Keluarga
+            </h2>
         </div>
         
         <form action="{{ route('admin.families.store') }}" method="POST" class="p-6">
@@ -33,24 +36,24 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="kk_number" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="kk_number" class="block text-sm font-bold text-dark-grey dark:text-white mb-2">
                         Nomor KK <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="kk_number" id="kk_number" value="{{ old('kk_number') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 @error('kk_number') border-red-500 @enderror"
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('kk_number') border-red-500 @enderror"
                            maxlength="16" pattern="[0-9]{16}" required>
                     @error('kk_number')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <p class="mt-1 text-xs text-gray-500">16 digit angka</p>
+                    <p class="mt-1 text-xs text-text-secondary dark:text-gray-400">16 digit angka</p>
                 </div>
 
                 <div>
-                    <label for="head_name" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="head_name" class="block text-sm font-bold text-dark-grey dark:text-white mb-2">
                         Nama Kepala Keluarga <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="head_name" id="head_name" value="{{ old('head_name') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 @error('head_name') border-red-500 @enderror"
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('head_name') border-red-500 @enderror"
                            required>
                     @error('head_name')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -58,11 +61,11 @@
                 </div>
 
                 <div>
-                    <label for="head_resident_id" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="head_resident_id" class="block text-sm font-bold text-dark-grey dark:text-white mb-2">
                         Pilih Kepala Keluarga dari Data Penduduk
                     </label>
                     <select name="head_resident_id" id="head_resident_id"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary">
                         <option value="">-- Pilih atau Kosongkan --</option>
                         @foreach($residents as $resident)
                             <option value="{{ $resident->id }}" {{ old('head_resident_id') == $resident->id ? 'selected' : '' }}>
@@ -70,15 +73,15 @@
                             </option>
                         @endforeach
                     </select>
-                    <p class="mt-1 text-xs text-gray-500">Opsional - akan otomatis dijadikan anggota KK</p>
+                    <p class="mt-1 text-xs text-text-secondary dark:text-gray-400">Opsional - akan otomatis dijadikan anggota KK</p>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
+                    <label for="address" class="block text-sm font-bold text-dark-grey dark:text-white mb-2">
                         Alamat <span class="text-red-500">*</span>
                     </label>
                     <textarea name="address" id="address" rows="2"
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 @error('address') border-red-500 @enderror"
+                              class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('address') border-red-500 @enderror"
                               required>{{ old('address') }}</textarea>
                     @error('address')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -86,26 +89,26 @@
                 </div>
 
                 <div>
-                    <label for="rt" class="block text-sm font-medium text-gray-700 mb-1">RT</label>
+                    <label for="rt" class="block text-sm font-bold text-dark-grey dark:text-white mb-2">RT</label>
                     <input type="text" name="rt" id="rt" value="{{ old('rt') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary"
                            maxlength="5">
                 </div>
 
                 <div>
-                    <label for="rw" class="block text-sm font-medium text-gray-700 mb-1">RW</label>
+                    <label for="rw" class="block text-sm font-bold text-dark-grey dark:text-white mb-2">RW</label>
                     <input type="text" name="rw" id="rw" value="{{ old('rw') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary"
                            maxlength="5">
                 </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-end space-x-3">
-                <a href="{{ route('admin.families.index') }}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+            <div class="mt-6 flex items-center justify-end gap-3">
+                <a href="{{ route('admin.families.index') }}" class="px-4 py-2.5 font-bold text-dark-grey dark:text-white bg-gray-100 dark:bg-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-white/20 transition-colors">
                     Batal
                 </a>
-                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                    <i class="fas fa-save mr-2"></i>Simpan
+                <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-bold">
+                    <span class="material-symbols-outlined text-[20px]">save</span>Simpan
                 </button>
             </div>
         </form>

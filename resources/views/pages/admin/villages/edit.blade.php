@@ -5,12 +5,12 @@
 @section('content')
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800">Edit Desa</h1>
-            <p class="mt-1 text-gray-600">{{ $village->name }}</p>
+            <h1 class="text-3xl font-black text-dark-grey dark:text-white">Edit Desa</h1>
+            <p class="mt-1 text-text-secondary dark:text-gray-400">{{ $village->name }}</p>
         </div>
         <a href="{{ route('admin.villages.index') }}"
-           class="inline-flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors mt-4 sm:mt-0">
-            <i class="fas fa-arrow-left mr-2"></i>
+           class="inline-flex items-center gap-2 px-4 py-2 text-dark-grey dark:text-white bg-gray-100 dark:bg-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-white/20 transition-colors font-bold mt-4 sm:mt-0">
+            <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             Kembali
         </a>
     </div>
@@ -19,81 +19,81 @@
         @csrf
         @method('PUT')
 
-        <div class="bg-white rounded-xl shadow-sm p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                <i class="fas fa-building text-indigo-600 mr-2"></i>
+        <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-6">
+            <h3 class="text-lg font-bold text-dark-grey dark:text-white mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">location_city</span>
                 Informasi Desa
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Desa *</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Nama Desa *</label>
                     <input type="text" name="name" value="{{ old('name', $village->name) }}" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 @error('name') border-red-500 @enderror">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('name') border-red-500 @enderror">
                     @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kode Desa *</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Kode Desa *</label>
                     <input type="text" name="code" value="{{ old('code', $village->code) }}" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 @error('code') border-red-500 @enderror">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('code') border-red-500 @enderror">
                     @error('code') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Provinsi *</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Provinsi *</label>
                     <input type="text" name="province" value="{{ old('province', $village->province) }}" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 @error('province') border-red-500 @enderror">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('province') border-red-500 @enderror">
                     @error('province') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kabupaten/Kota *</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Kabupaten/Kota *</label>
                     <input type="text" name="regency" value="{{ old('regency', $village->regency) }}" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 @error('regency') border-red-500 @enderror">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('regency') border-red-500 @enderror">
                     @error('regency') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kecamatan *</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Kecamatan *</label>
                     <input type="text" name="district" value="{{ old('district', $village->district) }}" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 @error('district') border-red-500 @enderror">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary @error('district') border-red-500 @enderror">
                     @error('district') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Alamat</label>
                     <input type="text" name="address" value="{{ old('address', $village->address) }}"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Telepon</label>
                     <input type="text" name="phone" value="{{ old('phone', $village->phone) }}"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <label class="block text-sm font-bold text-dark-grey dark:text-white mb-2">Email</label>
                     <input type="email" name="email" value="{{ old('email', $village->email) }}"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-surface-dark text-dark-grey dark:text-white focus:ring-2 focus:ring-primary focus:border-primary">
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="flex items-center">
+                    <label class="flex items-center cursor-pointer">
                         <input type="hidden" name="is_active" value="0">
                         <input type="checkbox" name="is_active" value="1" 
                                {{ old('is_active', $village->is_active) ? 'checked' : '' }}
-                               class="rounded text-indigo-600 focus:ring-indigo-500">
-                        <span class="ml-2 text-sm text-gray-700">Desa Aktif</span>
+                               class="rounded text-primary focus:ring-primary w-5 h-5">
+                        <span class="ml-3 text-sm font-bold text-dark-grey dark:text-white">Desa Aktif</span>
                     </label>
                 </div>
             </div>
 
             <div class="mt-6 flex justify-end">
                 <button type="submit" 
-                        class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
-                    <i class="fas fa-save mr-2"></i>
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-bold">
+                    <span class="material-symbols-outlined">save</span>
                     Simpan Perubahan
                 </button>
             </div>
