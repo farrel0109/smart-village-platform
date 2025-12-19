@@ -23,7 +23,7 @@
             <div class="flex justify-between h-20 items-center">
                 <!-- Logo & Brand -->
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('img/logo-desa.png') }}" alt="Logo Desa Pintar" class="h-12 w-auto">
+                    <img src="{{ asset('img/logo-desa.svg') }}" alt="Logo Desa Pintar" class="h-12 w-auto">
                     <div class="hidden sm:block">
                         <div class="font-black text-xl" :class="darkMode ? 'text-white' : 'text-dark-grey'">Desa Pintar</div>
                         <div class="text-xs text-primary font-bold">Sistem Administrasi Digital</div>
@@ -370,7 +370,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-4">
-                        <img src="{{ asset('img/logo-desa.png') }}" alt="Logo Desa Pintar" class="h-10 w-auto">
+                        <img src="{{ asset('img/logo-desa.svg') }}" alt="Logo Desa Pintar" class="h-10 w-auto">
                         <div>
                             <div class="font-black text-lg" :class="darkMode ? 'text-white' : 'text-dark-grey'">Desa Pintar</div>
                             <div class="text-xs text-primary font-bold">Sistem Administrasi Digital</div>

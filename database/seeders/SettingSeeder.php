@@ -53,7 +53,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key' => 'village_logo',
-                'value' => 'img/logo-desa.png',
+                'value' => 'img/logo-desa.svg',
                 'village_id' => $village1?->id,
             ],
             [

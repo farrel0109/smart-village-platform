@@ -11,7 +11,7 @@
          :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : 'justify-between'">
         
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-            <img src="{{ asset('img/logo-desa.png') }}" alt="Logo" class="h-10 w-auto transition-all duration-300" :class="sidebarCollapsed ? 'lg:h-8' : 'h-10'">
+            <img src="{{ asset('img/logo-desa.svg') }}" alt="Logo" class="h-10 w-auto transition-all duration-300" :class="sidebarCollapsed ? 'lg:h-8' : 'h-10'">
             <div class="transition-opacity duration-300" :class="sidebarCollapsed ? 'lg:hidden' : 'block'">
                 <div class="font-black text-lg leading-none text-dark-grey dark:text-white">Desa<span class="text-primary">Pintar</span></div>
                 <div class="text-[10px] font-bold text-primary tracking-wider">ADMIN PANEL</div>
