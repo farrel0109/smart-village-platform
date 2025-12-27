@@ -87,7 +87,7 @@
                     </h1>
                     
                     <p class="text-lg md:text-xl mb-8 leading-relaxed" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
-                        Platform administrasi desa digital yang memudahkan masyarakat dalam mengakses layanan surat-menyurat, informasi, dan data kependudukan <strong class="text-primary">tanpa harus ke kantor desa</strong>.
+                        Platform administrasi desa digital yang memudahkan masyarakat dalam mengakses layanan surat-menyurat, informasi, dan data kependudukan <strong class="text-primary">tanpa harus ke kantor desa</strong>. Sistem terintegrasi untuk kemajuan desa.
                     </p>
 
                     <!-- Trust Indicators -->
@@ -221,6 +221,175 @@
                     <p class="text-text-secondary dark:text-text-secondary-dark text-sm leading-relaxed">
                         Data pribadi <strong>terenkripsi</strong> dan backup otomatis setiap hari.
                     </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Roles Section -->
+    <section class="py-20 transition-colors duration-200" :class="darkMode ? 'bg-surface-dark' : 'bg-background-light'">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 text-primary text-sm font-bold rounded-full mb-4">Akses Sistem</span>
+                <h2 class="text-3xl md:text-4xl font-black mb-4" :class="darkMode ? 'text-white' : 'text-dark-grey'">Siapa yang Bisa Menggunakan?</h2>
+                <p class="text-text-secondary dark:text-text-secondary-dark max-w-2xl mx-auto text-lg">
+                    Platform ini dirancang untuk menghubungkan seluruh elemen desa dalam satu ekosistem digital
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Role 1: Warga -->
+                <div class="relative p-8 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" :class="darkMode ? 'bg-background-dark border-border-dark' : 'bg-white border-border-light'">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-8xl">person</span>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="size-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-6">
+                            <span class="material-symbols-outlined text-2xl">person</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3" :class="darkMode ? 'text-white' : 'text-dark-grey'">Warga Desa</h3>
+                        <p class="text-text-secondary dark:text-text-secondary-dark mb-6">
+                            Mengajukan surat, melihat pengumuman, dan memperbarui data profil pribadi secara mandiri.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Pengajuan Surat Online
+                            </li>
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Update Profil & Foto
+                            </li>
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Akses Pengumuman
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Role 2: Admin Desa -->
+                <div class="relative p-8 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" :class="darkMode ? 'bg-background-dark border-border-dark' : 'bg-white border-border-light'">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-8xl">admin_panel_settings</span>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="size-12 bg-sky-blue/10 rounded-lg flex items-center justify-center text-sky-blue mb-6">
+                            <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3" :class="darkMode ? 'text-white' : 'text-dark-grey'">Admin Desa</h3>
+                        <p class="text-text-secondary dark:text-text-secondary-dark mb-6">
+                            Mengelola pelayanan warga, memproses surat, dan manajemen data kependudukan desa.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-sky-blue text-lg">check_circle</span>
+                                Verifikasi Warga
+                            </li>
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-sky-blue text-lg">check_circle</span>
+                                Proses Surat Menyurat
+                            </li>
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-sky-blue text-lg">check_circle</span>
+                                Manajemen Penduduk
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Role 3: Super Admin -->
+                <div class="relative p-8 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" :class="darkMode ? 'bg-background-dark border-border-dark' : 'bg-white border-border-light'">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-8xl">settings_suggest</span>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="size-12 bg-earth/10 rounded-lg flex items-center justify-center text-earth mb-6">
+                            <span class="material-symbols-outlined text-2xl">settings_suggest</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3" :class="darkMode ? 'text-white' : 'text-dark-grey'">Super Admin</h3>
+                        <p class="text-text-secondary dark:text-text-secondary-dark mb-6">
+                            Kontrol penuh sistem, manajemen wilayah desa, dan pemeliharaan aplikasi.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-earth text-lg">check_circle</span>
+                                Manajemen Desa
+                            </li>
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-earth text-lg">check_circle</span>
+                                Backup & Restore
+                            </li>
+                            <li class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-text-secondary'">
+                                <span class="material-symbols-outlined text-earth text-lg">check_circle</span>
+                                Global Settings
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section class="py-20 transition-colors duration-200" :class="darkMode ? 'bg-background-dark' : 'bg-white'">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 text-primary text-sm font-bold rounded-full mb-4">Alur Proses</span>
+                <h2 class="text-3xl md:text-4xl font-black mb-4" :class="darkMode ? 'text-white' : 'text-dark-grey'">Mudahnya Mengurus Surat</h2>
+                <p class="text-text-secondary dark:text-text-secondary-dark max-w-2xl mx-auto text-lg">
+                    Hanya 4 langkah mudah untuk mendapatkan surat keterangan yang Anda butuhkan
+                </p>
+            </div>
+
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-700 -translate-y-1/2 z-0"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto bg-white dark:bg-surface-dark border-4 border-primary rounded-full flex items-center justify-center text-primary text-xl font-black mb-6 shadow-lg">
+                            1
+                        </div>
+                        <h3 class="text-lg font-bold mb-2" :class="darkMode ? 'text-white' : 'text-dark-grey'">Login</h3>
+                        <p class="text-sm text-text-secondary dark:text-text-secondary-dark">
+                            Masuk ke aplikasi menggunakan akun warga Anda
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto bg-white dark:bg-surface-dark border-4 border-primary rounded-full flex items-center justify-center text-primary text-xl font-black mb-6 shadow-lg">
+                            2
+                        </div>
+                        <h3 class="text-lg font-bold mb-2" :class="darkMode ? 'text-white' : 'text-dark-grey'">Pilih Surat</h3>
+                        <p class="text-sm text-text-secondary dark:text-text-secondary-dark">
+                            Pilih jenis surat yang ingin diajukan dan isi formulir
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto bg-white dark:bg-surface-dark border-4 border-primary rounded-full flex items-center justify-center text-primary text-xl font-black mb-6 shadow-lg">
+                            3
+                        </div>
+                        <h3 class="text-lg font-bold mb-2" :class="darkMode ? 'text-white' : 'text-dark-grey'">Proses</h3>
+                        <p class="text-sm text-text-secondary dark:text-text-secondary-dark">
+                            Admin desa memverifikasi dan memproses pengajuan
+                        </p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto bg-white dark:bg-surface-dark border-4 border-primary rounded-full flex items-center justify-center text-primary text-xl font-black mb-6 shadow-lg">
+                            4
+                        </div>
+                        <h3 class="text-lg font-bold mb-2" :class="darkMode ? 'text-white' : 'text-dark-grey'">Selesai</h3>
+                        <p class="text-sm text-text-secondary dark:text-text-secondary-dark">
+                            Unduh surat yang sudah jadi dalam format PDF
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

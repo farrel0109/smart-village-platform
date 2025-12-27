@@ -28,6 +28,9 @@ use App\Http\Controllers\Admin\BackupController;
 // User Controllers
 use App\Http\Controllers\User\LetterRequestController;
 
+// API Controllers
+use App\Http\Controllers\Api\RegionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +47,14 @@ use App\Http\Controllers\User\LetterRequestController;
 // ============================================================================
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Region API (for cascading dropdowns)
+Route::prefix('api/regions')->name('api.regions.')->group(function () {
+    Route::get('/provinces', [RegionController::class, 'provinces'])->name('provinces');
+    Route::get('/regencies/{provinceId}', [RegionController::class, 'regencies'])->name('regencies');
+    Route::get('/districts/{regencyId}', [RegionController::class, 'districts'])->name('districts');
+    Route::get('/villages/{districtId}', [RegionController::class, 'villages'])->name('villages');
+});
 
 // ============================================================================
 // GUEST ROUTES (Authentication)
